@@ -48,7 +48,7 @@ int login(){
     {
     case 1:
         login:
-        cout << "=== LOGIN ===\n";
+        cout << "\n=== LOGIN ===\n";
         cout << "Email: ";
         cin >> email;
         cout << "Password: ";
@@ -68,7 +68,7 @@ int login(){
 
         break;
     case 2:
-        cout << "=== REGISTER ===\n";
+        cout << "\n=== REGISTER ===\n";
         cout << "Email: ";
         cin >> email;
         cout << "Create username: ";
@@ -148,7 +148,7 @@ int main() {
     char confirm;
     
     do{
-        cout << "=== MENU UTAMA ===\n";
+        cout << "\n=== MENU UTAMA ===\n";
         cout << "1. Verifikasi Data Siswa dan Sekolah\n";
         cout << "2. Pendaftaran SNBP\n";
         cout << "3. Pendaftaran UTBK-SNBT\n";
@@ -174,13 +174,13 @@ int main() {
                 Row row;
                 
                 username = data<std::string>("biodata", "nama_lengkap", "id_user", userId);
-                cout << "\nWelcome " << username << endl;
                 cout << "Your data has been verified!\n";
+                cout << "\nWelcome " << username << endl;
                 while((row = res.fetchOne())){
                     cout << "Id biodata: " << row[0] << endl;
                     cout << "Id user: " << row[1] << endl;
                     cout << "Id sekolah: " << row[2] << endl;
-                    cout << "Nama: " << row[3] << endl << endl;
+                    cout << "Nama: " << row[3] << endl;
                 }
             } else {
                 cout << "NISN: ";
