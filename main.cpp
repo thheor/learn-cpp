@@ -7,6 +7,7 @@ using namespace std;
 Session sess("localhost", 33060, "root", "");
 Schema db = sess.getSchema("snpmb");
 RowResult res;
+SqlResult sqlRes;
 DocResult docs;
 Row row;
 
@@ -68,6 +69,8 @@ int login(){
 
         break;
     case 2:
+        // Kayanya username mending ganti NISN
+        // trus tanggal lahir ganti NPSN
         cout << "\n=== REGISTER ===\n";
         cout << "Email: ";
         cin >> email;
@@ -160,27 +163,36 @@ int main() {
         std::string nama, tempat, tanggalLahir, sekolah, jurusan;
         switch(option){
             case 1:
-            cout << "=== Verifikasi biodata ===\n";
+            cout << "\n=== Verifikasi biodata ===\n";
 
             exist = isExist("biodata", "id_user", "id_user", userId);
             if(exist){
-                Table tab = db.getTable("biodata");
-                RowResult res = tab.select("id_biodata", "id_user", "id_sekolah", "nama_lengkap")
-                            .where("id_user = :param")
-                            .bind("param", userId)
-                            .execute();
-
-                cout << "Your data: \n";
-                Row row;
+                // Table tab = db.getTable("biodata");
+                // RowResult res = tab.select("id_biodata", "id_user", "id_sekolah", "nama_lengkap")
+                //             .where("id_user = :param")
+                //             .bind("param", userId)
+                //             .execute();
                 
+                sess.sql("USE snpmb").execute();
+                SqlResult sqlRes = sess.sql("SELECT b.nisn, b.nama_lengkap, b.tempat_lahir, b.tanggal_lahir, b.jurusan, b.tahun_lulus, sa.nama_sekolah "
+                                            "FROM biodata b "
+                                            "JOIN sekolah_asal sa ON b.id_sekolah = sa.id_sekolah "
+                                            "JOIN akun_user au ON au.id_user = b.id_user "
+                                            "WHERE au.id_user = " + std::to_string(userId))
+                                            .execute();
+                Row row;
+                    
                 username = data<std::string>("biodata", "nama_lengkap", "id_user", userId);
                 cout << "Your data has been verified!\n";
-                cout << "\nWelcome " << username << endl;
-                while((row = res.fetchOne())){
-                    cout << "Id biodata: " << row[0] << endl;
-                    cout << "Id user: " << row[1] << endl;
-                    cout << "Id sekolah: " << row[2] << endl;
-                    cout << "Nama: " << row[3] << endl;
+                cout << "Welcome " << username << endl << endl;
+                while((row = sqlRes.fetchOne())){
+                    cout << "NISN: " << row[0] << endl;
+                    cout << "Nama: " << row[1] << endl;
+                    cout << "Tempat Lahir: " << row[2] << endl;
+                    cout << "Tanggal Lahir: " << row[3] << endl;
+                    cout << "Jurusan: " << row[4] << endl;
+                    cout << "Tahun Lulus: " << row[5] << endl;
+                    cout << "Sekolah: " << row[6] << endl;
                 }
             } else {
                 cout << "NISN: ";
@@ -213,7 +225,13 @@ int main() {
             break;
             case 2:
                 // if nisn is not in the isEligible database, print you are not eligible 
+            exist = isExist("biodata", "id_user", "id_user", userId);
+            if(!exist){
+                cout << "\nYou have to verify your data first!\n";
+                break;
+            }
             cout << "=== SNBP ===\n";
+
 
             break;
             case 3:
