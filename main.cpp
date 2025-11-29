@@ -105,50 +105,94 @@ int login(){
     return userId;
 }
 
-// void inputJurusan(){
-//     Table tab = db.getTable();
-//     vector<std::string> ptn;
-//     vector<std::string> jurusan;
-//     bool reInput = true;
-//     int jumlahJurusan;
-//     char confirm;
+void inputJurusan(std::string type, int userId, int biodataId){
+    vector<int> jurusanId;
+    std::string jurusan;
+    int ptnId, jumlahJurusan, constraint;
+    char confirm;
+    
+    if(type == "SNBP"){
+        if(!isExist("biodata", "status_eligible", "id_user", userId)){
+            cout << "Maaf anda bukan siswa eligible.\n";
+            return;
+        } else {
+            constraint = 2;
+        }
+    } else if(type == "SNBT"){
+        constraint = 4;
+    }
 
-//     while(reInput){
-//         cout << "Masukkan jumlah jurusan (1-4): ";
-//         cin >> jumlahJurusan;
-//         std::string temp;
+        inputJurusan:
+        cout << "Masukkan jumlah jurusan (1-" + to_string(constraint) + "): ";
+        cin >> jumlahJurusan;
 
-//         for(int i = 0; i < jumlahJurusan; i++){
-//             cout << "PTN Pilihan " << i + 1 << ": ";
-//             cin >> temp;
-//             ptn.push_back(temp);
-//                         // sql query
-//             cout << "Program Studi Pilihan " << i + 1 << ": ";
-//             cin >> temp;
-//             jurusan.push_back(temp);
-//         }
+    if(jumlahJurusan > constraint || jumlahJurusan < 1){
+            cout << "Masukkan jumlah jurusan dengan benar!\n";
+            goto inputJurusan;
+        }
 
-//         cout << "Ketik [Y/y] jika sudah benar \n => ";
-//         cin >> confirm;
+    for(int i = 0; i < jumlahJurusan; i++){
+        Table tab = db.getTable("ptn");
+        RowResult res = tab.select("nama_ptn").execute();
 
-//         if(confirm == 'Y' || confirm == 'y'){
-//             // insert
-//             reInput = false;
-//         } else {
-//             ptn.clear();
-//             jurusan.clear();
-//         }
-//     }
-// }
+        cout << "Daftar PTN\n";
+        int index = 1;
+        for(Row row : res.fetchAll()){
+            cout << index << ". " << row.get(0).get<std::string>() << endl;
+            index++;
+        }
+
+        cout << "PTN Pilihan " << i + 1 << ": ";
+        cin >> ptnId;
+                    // sql query
+        tab = db.getTable("program_studi");
+        res = tab.select("nama_prodi").where("id_ptn = :param").bind("param" ,ptnId).execute();
+        
+        cout << "\nDaftar Prodi\n";
+        for(Row row : res.fetchAll()){
+            cout << row.get(0).get<std::string>() << endl;
+        }
+        cin.ignore();
+        inputProdi:
+        cout << "Program Studi Pilihan " << i + 1 << " [nama prodi]: ";
+        getline(cin, jurusan);
+        cout << jurusan << endl;
+        if(!isExist("program_studi", "nama_prodi", "nama_prodi", jurusan)){
+            cout << "Masukkan nama prodi dengan benar!\n";
+            goto inputProdi;
+        }
+        std::string temp = "id_ptn = " + to_string(ptnId) + " && nama_prodi";
+        int Id = data<int>("program_studi", "id_prodi", temp, jurusan);
+        jurusanId.push_back(Id);
+    }
+
+    if(jumlahJurusan == 1){
+        Table tab = db.getTable("pendaftaran_snbp");
+        tab.insert("id_user", "id_biodata", "id_prodi1")
+        .values(userId, biodataId, jurusanId.at(0))
+        .execute();
+    } else if (jumlahJurusan == 2){
+        Table tab = db.getTable("pendaftaran_snbp");
+        tab.insert("id_user", "id_biodata", "id_prodi1", "id_prodi2")
+        .values(userId, biodataId, jurusanId.at(0), jurusanId.at(1))
+        .execute();
+    }
+
+    cout << "Berhasil daftar " + type + "!\n";
+
+    jurusanId.clear();
+}
 
 int main() {
     Table tab = db.getTable("akun_user");
-    int option, userId;
+    int option, userId, biodataId;
     std::string username;
 
     userId = login();
     bool reInput = true, exist;
     char confirm;
+
+    biodataId = data<int>("biodata", "id_biodata", "id_user", userId);
     
     do{
         cout << "\n=== MENU UTAMA ===\n";
@@ -183,8 +227,8 @@ int main() {
                 Row row;
                     
                 username = data<std::string>("biodata", "nama_lengkap", "id_user", userId);
-                cout << "Your data has been verified!\n";
-                cout << "Welcome " << username << endl << endl;
+                cout << "Your data has been verified!\n\n";
+                cout << "Welcome " << username << endl;
                 while((row = sqlRes.fetchOne())){
                     cout << "NISN: " << row[0] << endl;
                     cout << "Nama: " << row[1] << endl;
@@ -230,10 +274,9 @@ int main() {
                 cout << "\nYou have to verify your data first!\n";
                 break;
             }
-            cout << "=== SNBP ===\n";
-
-
-            break;
+            cout << "\n=== SNBP ===\n";
+            inputJurusan("SNBP", userId, biodataId);
+                break;
             case 3:
 
                 break;
