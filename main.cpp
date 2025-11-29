@@ -112,7 +112,8 @@ void inputJurusan(std::string type, int userId, int biodataId){
     char confirm;
     
     if(type == "SNBP"){
-        if(!isExist("biodata", "status_eligible", "id_user", userId)){
+        std::string isEligible = data<std::string>("biodata", "status_eligible", "id_user", userId);
+        if(isEligible == "Tidak_Eligible"){
             cout << "Maaf anda bukan siswa eligible.\n";
             return;
         } else {
@@ -156,7 +157,7 @@ void inputJurusan(std::string type, int userId, int biodataId){
         inputProdi:
         cout << "Program Studi Pilihan " << i + 1 << " [nama prodi]: ";
         getline(cin, jurusan);
-        cout << jurusan << endl;
+
         if(!isExist("program_studi", "nama_prodi", "nama_prodi", jurusan)){
             cout << "Masukkan nama prodi dengan benar!\n";
             goto inputProdi;
