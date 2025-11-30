@@ -167,13 +167,17 @@ void inputJurusan(std::string type, int userId, int biodataId){
         jurusanId.push_back(Id);
     }
 
+    Table tab = db.getTable("pendaftaran_snbp");
+
+    if(type == "SNBT"){
+        Table tab = db.getTable("pendaftaran_snbt");
+    }
+
     if(jumlahJurusan == 1){
-        Table tab = db.getTable("pendaftaran_snbp");
         tab.insert("id_user", "id_biodata", "id_prodi1")
         .values(userId, biodataId, jurusanId.at(0))
         .execute();
     } else if (jumlahJurusan == 2){
-        Table tab = db.getTable("pendaftaran_snbp");
         tab.insert("id_user", "id_biodata", "id_prodi1", "id_prodi2")
         .values(userId, biodataId, jurusanId.at(0), jurusanId.at(1))
         .execute();
@@ -182,6 +186,211 @@ void inputJurusan(std::string type, int userId, int biodataId){
     cout << "Berhasil daftar " + type + "!\n";
 
     jurusanId.clear();
+}
+
+void soalUtbk(int userId){
+    double scorePU = 0;
+    char jawaban;
+
+    cout << "\n=== UTBK ===\n";
+    cout << "=== Penalaran Umum ===\n";
+    cout << "1. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi makan\n";
+    cout << "b. Andi minum\n";
+    cout << "c. Andi makan dan minum\n";
+    cout << "d. Andi q\n";
+    cout << "Masukkan jawaban: ";
+     cin >> jawaban;
+      if(jawaban == 'd') scorePU += 100/3;
+    cout << "2. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi makan\n";
+    cout << "b. Andi q\n";
+    cout << "c. Andi minum\n";
+    cout << "d. Andi makan dan minum\n";
+    cout << "Masukkan jawaban: ";
+     cin >> jawaban;
+      if(jawaban == 'd') scorePU += 100/3;
+    cout << "3. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi q\n";
+    cout << "b. Andi makan\n";
+    cout << "c. Andi minum\n";
+    cout << "d. Andi makan dan minum\n";
+    cout << "Masukkan jawaban: ";
+     cin >> jawaban;
+      if(jawaban == 'a') scorePU += 100/3;
+    cout << "=== Pemahaman dan Pengetahuan Umum ===\n";
+    cout << "1. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi makan\n";
+    cout << "b. Andi minum\n";
+    cout << "c. Andi makan dan minum\n";
+    cout << "d. Andi q\n";
+    cout << "Masukkan jawaban: ";
+     cin >> jawaban;
+      if(jawaban == 'd') scorePU += 100/3;
+    cout << "2. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi makan\n";
+    cout << "b. Andi q\n";
+    cout << "c. Andi minum\n";
+    cout << "d. Andi makan dan minum\n";
+    cout << "Masukkan jawaban: ";
+     cin >> jawaban;
+      if(jawaban == 'd') scorePU += 100/3;
+    cout << "3. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi q\n";
+    cout << "b. Andi makan\n";
+    cout << "c. Andi minum\n";
+    cout << "d. Andi makan dan minum\n";
+    cout << "Masukkan jawaban: ";
+     cin >> jawaban;
+      if(jawaban == 'a') scorePU += 100/3;
+    cout << "=== Pemahaman Baca Tulis ===\n";
+    cout << "1. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi makan\n";
+    cout << "b. Andi minum\n";
+    cout << "c. Andi makan dan minum\n";
+    cout << "d. Andi q\n";
+    cout << "Masukkan jawaban: ";
+     cin >> jawaban;
+      if(jawaban == 'd') scorePU += 100/3;
+    cout << "2. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi makan\n";
+    cout << "b. Andi q\n";
+    cout << "c. Andi minum\n";
+    cout << "d. Andi makan dan minum\n";
+    cout << "Masukkan jawaban: ";
+     cin >> jawaban;
+      if(jawaban == 'd') scorePU += 100/3;
+    cout << "3. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi q\n";
+    cout << "b. Andi makan\n";
+    cout << "c. Andi minum\n";
+    cout << "d. Andi makan dan minum\n";
+    cout << "Masukkan jawaban: ";
+     cin >> jawaban;
+      if(jawaban == 'a') scorePU += 100/3;
+    cout << "=== Pengetahuan Kuantitatif ===\n";
+    cout << "1. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi makan\n";
+    cout << "b. Andi minum\n";
+    cout << "c. Andi makan dan minum\n";
+    cout << "d. Andi q\n";
+    cout << "Masukkan jawaban: ";
+     cin >> jawaban;
+      if(jawaban == 'd') scorePU += 100/3;
+    cout << "2. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi makan\n";
+    cout << "b. Andi q\n";
+    cout << "c. Andi minum\n";
+    cout << "d. Andi makan dan minum\n";
+    cout << "Masukkan jawaban: ";
+     cin >> jawaban;
+      if(jawaban == 'd') scorePU += 100/3;
+    cout << "3. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi q\n";
+    cout << "b. Andi makan\n";
+    cout << "c. Andi minum\n";
+    cout << "d. Andi makan dan minum\n";
+    cout << "Masukkan jawaban: ";
+     cin >> jawaban;
+      if(jawaban == 'a') scorePU += 100/3;
+    cout << "=== Literasi Bahasa Indonesia ===\n";
+    cout << "1. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi makan\n";
+    cout << "b. Andi minum\n";
+    cout << "c. Andi makan dan minum\n";
+    cout << "d. Andi q\n";
+    cout << "Masukkan jawaban: ";
+     cin >> jawaban;
+      if(jawaban == 'd') scorePU += 100/3;
+    cout << "2. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi makan\n";
+    cout << "b. Andi q\n";
+    cout << "c. Andi minum\n";
+    cout << "d. Andi makan dan minum\n";
+    cout << "Masukkan jawaban: ";
+     cin >> jawaban;
+      if(jawaban == 'd') scorePU += 100/3;
+    cout << "3. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi q\n";
+    cout << "b. Andi makan\n";
+    cout << "c. Andi minum\n";
+    cout << "d. Andi makan dan minum\n";
+    cout << "Masukkan jawaban: ";
+     cin >> jawaban;
+      if(jawaban == 'a') scorePU += 100/3;
+    cout << "=== Literasi Bahasa Inggris ===\n";
+    cout << "1. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi makan\n";
+    cout << "b. Andi minum\n";
+    cout << "c. Andi makan dan minum\n";
+    cout << "d. Andi q\n";
+    cout << "Masukkan jawaban: ";
+     cin >> jawaban;
+      if(jawaban == 'd') scorePU += 100/3;
+    cout << "2. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi makan\n";
+    cout << "b. Andi q\n";
+    cout << "c. Andi minum\n";
+    cout << "d. Andi makan dan minum\n";
+    cout << "Masukkan jawaban: ";
+     cin >> jawaban;
+      if(jawaban == 'd') scorePU += 100/3;
+    cout << "3. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi q\n";
+    cout << "b. Andi makan\n";
+    cout << "c. Andi minum\n";
+    cout << "d. Andi makan dan minum\n";
+    cout << "Masukkan jawaban: ";
+     cin >> jawaban;
+      if(jawaban == 'a') scorePU += 100/3;
+    cout << "=== Penalaran Matematika ===\n";
+    cout << "1. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi makan\n";
+    cout << "b. Andi minum\n";
+    cout << "c. Andi makan dan minum\n";
+    cout << "d. Andi q\n";
+    cout << "Masukkan jawaban: ";
+     cin >> jawaban;
+      if(jawaban == 'd') scorePU += 100/3;
+    cout << "2. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi makan\n";
+    cout << "b. Andi q\n";
+    cout << "c. Andi minum\n";
+    cout << "d. Andi makan dan minum\n";
+    cout << "Masukkan jawaban: ";
+     cin >> jawaban;
+      if(jawaban == 'd') scorePU += 100/3;
+    cout << "3. Jika p maka q. Andi melakukan p. Apa kesimpulan yang valid?\n";
+    cout << "a. Andi q\n";
+    cout << "b. Andi makan\n";
+    cout << "c. Andi minum\n";
+    cout << "d. Andi makan dan minum\n";
+    cout << "Masukkan jawaban: ";
+    cin >> jawaban;
+    if(jawaban == 'a') scorePU += 100/3;
+    cout << "\nTerima kasih telah mengerjakan soal UTBK\n";
+    double totalScore = scorePU/7;
+    Table tab = db.getTable("hasil_utbk");
+    tab.insert("id_user", "subtes", "skor")
+        .values(userId, "All Subtes", totalScore)
+        .execute();
+
+}
+
+void announcement(int userId, std::string type){
+    double score = data<double>("hasil_utbk", "skor", "id_user", userId);
+
+    if(type == "SNBT"){
+        if(score > 500){
+            cout << "Anda lolos " << type << "!\n";
+        } else {
+            cout << "Maaf anda tidak lolos " << type << endl;
+            cout << "Tetap semangat dan jangan menyerah!\n";
+        }
+    } else if(type == "SNBP"){
+
+    }
+    
 }
 
 int main() {
@@ -208,78 +417,82 @@ int main() {
         std::string nama, tempat, tanggalLahir, sekolah, jurusan;
         switch(option){
             case 1:
-            cout << "\n=== Verifikasi biodata ===\n";
+                cout << "\n=== Verifikasi biodata ===\n";
 
-            exist = isExist("biodata", "id_user", "id_user", userId);
-            if(exist){
-                // Table tab = db.getTable("biodata");
-                // RowResult res = tab.select("id_biodata", "id_user", "id_sekolah", "nama_lengkap")
-                //             .where("id_user = :param")
-                //             .bind("param", userId)
-                //             .execute();
-                
-                sess.sql("USE snpmb").execute();
-                SqlResult sqlRes = sess.sql("SELECT b.nisn, b.nama_lengkap, b.tempat_lahir, b.tanggal_lahir, b.jurusan, b.tahun_lulus, sa.nama_sekolah "
-                                            "FROM biodata b "
-                                            "JOIN sekolah_asal sa ON b.id_sekolah = sa.id_sekolah "
-                                            "JOIN akun_user au ON au.id_user = b.id_user "
-                                            "WHERE au.id_user = " + std::to_string(userId))
-                                            .execute();
-                Row row;
+                exist = isExist("biodata", "id_user", "id_user", userId);
+                if(exist){
+                    // Table tab = db.getTable("biodata");
+                    // RowResult res = tab.select("id_biodata", "id_user", "id_sekolah", "nama_lengkap")
+                    //             .where("id_user = :param")
+                    //             .bind("param", userId)
+                    //             .execute();
                     
-                username = data<std::string>("biodata", "nama_lengkap", "id_user", userId);
-                cout << "Your data has been verified!\n\n";
-                cout << "Welcome " << username << endl;
-                while((row = sqlRes.fetchOne())){
-                    cout << "NISN: " << row[0] << endl;
-                    cout << "Nama: " << row[1] << endl;
-                    cout << "Tempat Lahir: " << row[2] << endl;
-                    cout << "Tanggal Lahir: " << row[3] << endl;
-                    cout << "Jurusan: " << row[4] << endl;
-                    cout << "Tahun Lulus: " << row[5] << endl;
-                    cout << "Sekolah: " << row[6] << endl;
-                }
-            } else {
-                cout << "NISN: ";
-                cin >> nisn;
-                cout << "Nama: ";
-                cin.ignore();
-                getline(cin, nama);
-                cout << "Tempat lahir: ";
-                cin.ignore();
-                getline(cin, tempat);
-                cout << "Tanggal Lahir [YYYY-MM-DD]: ";
-                cin >> tanggalLahir;
-                cout << "Sekolah: ";
-                cin.ignore();
-                getline(cin, sekolah);
-                cout << "Jurusan: ";
-                cin.ignore();
-                getline(cin, jurusan);
-                cout << "Tahun lulus: ";
-                cin >> tahunLulus;
-                
-                sekolahId = data<int>("sekolah_asal", "id_sekolah", "nama_sekolah", sekolah);
-                tab = db.getTable("biodata");
-                tab.insert("id_user", "id_sekolah", "nisn", "nama_lengkap", "tempat_lahir", "tanggal_lahir", "jurusan", "tahun_lulus")
-                    .values(userId, sekolahId, nisn, nama, tempat, tanggalLahir, jurusan, tahunLulus)
-                    .execute();
+                    sess.sql("USE snpmb").execute();
+                    SqlResult sqlRes = sess.sql("SELECT b.nisn, b.nama_lengkap, b.tempat_lahir, b.tanggal_lahir, b.jurusan, b.tahun_lulus, sa.nama_sekolah "
+                                                "FROM biodata b "
+                                                "JOIN sekolah_asal sa ON b.id_sekolah = sa.id_sekolah "
+                                                "JOIN akun_user au ON au.id_user = b.id_user "
+                                                "WHERE au.id_user = " + std::to_string(userId))
+                                                .execute();
+                    Row row;
+                        
+                    username = data<std::string>("biodata", "nama_lengkap", "id_user", userId);
+                    cout << "Your data has been verified!\n\n";
+                    cout << "Welcome " << username << endl;
+                    while((row = sqlRes.fetchOne())){
+                        cout << "NISN: " << row[0] << endl;
+                        cout << "Nama: " << row[1] << endl;
+                        cout << "Tempat Lahir: " << row[2] << endl;
+                        cout << "Tanggal Lahir: " << row[3] << endl;
+                        cout << "Jurusan: " << row[4] << endl;
+                        cout << "Tahun Lulus: " << row[5] << endl;
+                        cout << "Sekolah: " << row[6] << endl;
+                    }
+                } else {
+                    cout << "NISN: ";
+                    cin >> nisn;
+                    cout << "Nama: ";
+                    cin.ignore();
+                    getline(cin, nama);
+                    cout << "Tempat lahir: ";
+                    cin.ignore();
+                    getline(cin, tempat);
+                    cout << "Tanggal Lahir [YYYY-MM-DD]: ";
+                    cin >> tanggalLahir;
+                    cout << "Sekolah: ";
+                    cin.ignore();
+                    getline(cin, sekolah);
+                    cout << "Jurusan: ";
+                    cin.ignore();
+                    getline(cin, jurusan);
+                    cout << "Tahun lulus: ";
+                    cin >> tahunLulus;
+                    
+                    sekolahId = data<int>("sekolah_asal", "id_sekolah", "nama_sekolah", sekolah);
+                    tab = db.getTable("biodata");
+                    tab.insert("id_user", "id_sekolah", "nisn", "nama_lengkap", "tempat_lahir", "tanggal_lahir", "jurusan", "tahun_lulus")
+                        .values(userId, sekolahId, nisn, nama, tempat, tanggalLahir, jurusan, tahunLulus)
+                        .execute();
 
-                cout << "Data updated successfully!\n";
-            }
-            break;
+                    cout << "Data updated successfully!\n";
+                }
+                break;
             case 2:
                 // if nisn is not in the isEligible database, print you are not eligible 
-            exist = isExist("biodata", "id_user", "id_user", userId);
-            if(!exist){
-                cout << "\nYou have to verify your data first!\n";
-                break;
-            }
-            cout << "\n=== SNBP ===\n";
-            inputJurusan("SNBP", userId, biodataId);
+                exist = isExist("biodata", "id_user", "id_user", userId);
+                if(!exist){
+                    cout << "\nYou have to verify your data first!\n";
+                    break;
+                }
+                cout << "\n=== SNBP ===\n";
+                inputJurusan("SNBP", userId, biodataId);
+                announcement(userId, "SNBP");
                 break;
             case 3:
-
+                cout << "\n=== SNBT ===\n";
+                inputJurusan("SNBT", userId, biodataId);
+                soalUtbk(userId);
+                announcement(userId, "SNBT");
                 break;
             case 4:
                 cout << "BYE\n";
