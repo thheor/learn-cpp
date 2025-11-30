@@ -112,13 +112,7 @@ void inputJurusan(std::string type, int userId, int biodataId){
     char confirm;
     
     if(type == "SNBP"){
-        std::string isEligible = data<std::string>("biodata", "status_eligible", "id_user", userId);
-        if(isEligible == "Tidak_Eligible"){
-            cout << "Maaf anda bukan siswa eligible.\n";
-            return;
-        } else {
-            constraint = 2;
-        }
+        constraint = 2;
     } else if(type == "SNBT"){
         constraint = 4;
     }
@@ -170,7 +164,7 @@ void inputJurusan(std::string type, int userId, int biodataId){
     Table tab = db.getTable("pendaftaran_snbp");
 
     if(type == "SNBT"){
-        Table tab = db.getTable("pendaftaran_snbt");
+        tab = db.getTable("pendaftaran_snbt");
     }
 
     if(jumlahJurusan == 1){
@@ -369,7 +363,7 @@ void soalUtbk(int userId){
     cin >> jawaban;
     if(jawaban == 'a') scorePU += 100/3;
     cout << "\nTerima kasih telah mengerjakan soal UTBK\n";
-    double totalScore = scorePU/7;
+    double totalScore = scorePU;
     Table tab = db.getTable("hasil_utbk");
     tab.insert("id_user", "subtes", "skor")
         .values(userId, "All Subtes", totalScore)
@@ -378,17 +372,36 @@ void soalUtbk(int userId){
 }
 
 void announcement(int userId, std::string type){
-    double score = data<double>("hasil_utbk", "skor", "id_user", userId);
-
+    std::string hasil;
     if(type == "SNBT"){
+        double score = data<double>("hasil_utbk", "skor", "id_user", userId);
         if(score > 500){
-            cout << "Anda lolos " << type << "!\n";
+            cout << "Selamat Anda lolos " << type << "!\n";
+            hasil = "LULUS";
         } else {
-            cout << "Maaf anda tidak lolos " << type << endl;
+            cout << "Maaf Anda tidak lolos " << type << endl;
             cout << "Tetap semangat dan jangan menyerah!\n";
+            hasil = "TIDAK_LULUS";
         }
+        Table tab = db.getTable("pengumuman");
+        tab.insert("id_user", "jalur_seleksi", "hasil_akhir")
+            .values(userId, type, hasil)
+            .execute();
     } else if(type == "SNBP"){
-
+        int biodataId = data<int>("biodata", "id_biodata", "id_user", userId);
+        double score = data<double>("nilai_rapor_snbp", "avg(rata_rata)", "id_biodata", biodataId);
+        if(score > 85){
+            cout << "Selamat Anda lolos " << type << "!\n";
+            hasil = "LULUS";
+        } else {
+            cout << "Maaf Anda tidak lolos " << type << endl;
+            cout << "Tetap semangat dan jangan menyerah!\n";
+            hasil = "TIDAK_LULUS";
+        }
+        Table tab = db.getTable("pengumuman");
+        tab.insert("id_user", "jalur_seleksi", "hasil_akhir")
+            .values(userId, type, hasil)
+            .execute();
     }
     
 }
@@ -396,7 +409,7 @@ void announcement(int userId, std::string type){
 int main() {
     Table tab = db.getTable("akun_user");
     int option, userId, biodataId;
-    std::string username;
+    std::string username, isEligible;
 
     userId = login();
     bool reInput = true, exist;
@@ -485,8 +498,15 @@ int main() {
                     break;
                 }
                 cout << "\n=== SNBP ===\n";
-                inputJurusan("SNBP", userId, biodataId);
-                announcement(userId, "SNBP");
+                isEligible = data<std::string>("biodata", "status_eligible", "id_user", userId);
+    
+                if(isEligible == "Tidak_Eligible"){
+                    cout << "Maaf anda bukan siswa eligible.\n";
+                } else {
+                    inputJurusan("SNBP", userId, biodataId);
+                    announcement(userId, "SNBP");
+                }
+
                 break;
             case 3:
                 cout << "\n=== SNBT ===\n";
