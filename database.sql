@@ -90,13 +90,13 @@ DROP TABLE IF EXISTS `hasil_utbk`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `hasil_utbk` (
   `id_hasil` int NOT NULL AUTO_INCREMENT,
-  `id_snbt` int NOT NULL,
   `subtes` varchar(50) NOT NULL,
-  `skor` decimal(8,2) NOT NULL,
+  `skor` double NOT NULL,
+  `id_user` int DEFAULT NULL,
   PRIMARY KEY (`id_hasil`),
-  KEY `hasil_utbk_id_snbt_foreign` (`id_snbt`),
-  CONSTRAINT `hasil_utbk_id_snbt_foreign` FOREIGN KEY (`id_snbt`) REFERENCES `pendaftaran_snbt` (`id_snbt`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `fk_id_user` (`id_user`),
+  CONSTRAINT `fk_id_user` FOREIGN KEY (`id_user`) REFERENCES `akun_user` (`id_user`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -105,6 +105,7 @@ CREATE TABLE `hasil_utbk` (
 
 LOCK TABLES `hasil_utbk` WRITE;
 /*!40000 ALTER TABLE `hasil_utbk` DISABLE KEYS */;
+INSERT INTO `hasil_utbk` VALUES (7,'All Subtes',627,1);
 /*!40000 ALTER TABLE `hasil_utbk` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -119,13 +120,11 @@ CREATE TABLE `nilai_rapor_snbp` (
   `id_nilai_rapor` int NOT NULL AUTO_INCREMENT,
   `id_biodata` int NOT NULL,
   `rata_rata` decimal(8,2) NOT NULL,
-  `semester` enum('1','2','3','4','5') NOT NULL DEFAULT '1',
-  `mata_pelajaran` varchar(50) NOT NULL,
-  `nilai` decimal(8,2) NOT NULL,
+  `semester` enum('1','2','3','4','5') DEFAULT NULL,
   PRIMARY KEY (`id_nilai_rapor`),
   KEY `nilai_rapor_snbp_id_biodata_foreign` (`id_biodata`),
   CONSTRAINT `nilai_rapor_snbp_id_biodata_foreign` FOREIGN KEY (`id_biodata`) REFERENCES `biodata` (`id_biodata`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,6 +133,7 @@ CREATE TABLE `nilai_rapor_snbp` (
 
 LOCK TABLES `nilai_rapor_snbp` WRITE;
 /*!40000 ALTER TABLE `nilai_rapor_snbp` DISABLE KEYS */;
+INSERT INTO `nilai_rapor_snbp` VALUES (1,1,90.50,'1'),(2,1,91.50,'2'),(3,1,92.50,'3'),(4,1,92.50,'4'),(5,1,93.50,'5');
 /*!40000 ALTER TABLE `nilai_rapor_snbp` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -158,7 +158,7 @@ CREATE TABLE `pendaftaran_snbp` (
   KEY `pendaftaran_snbp_id_biodata_foreign` (`id_biodata`),
   CONSTRAINT `pendaftaran_snbp_id_biodata_foreign` FOREIGN KEY (`id_biodata`) REFERENCES `biodata` (`id_biodata`),
   CONSTRAINT `pendaftaran_snbp_id_prodi1_foreign` FOREIGN KEY (`id_prodi1`) REFERENCES `program_studi` (`id_prodi`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -167,7 +167,7 @@ CREATE TABLE `pendaftaran_snbp` (
 
 LOCK TABLES `pendaftaran_snbp` WRITE;
 /*!40000 ALTER TABLE `pendaftaran_snbp` DISABLE KEYS */;
-INSERT INTO `pendaftaran_snbp` VALUES (3,1,1,1,2,NULL,NULL,'2025-11-29 23:15:28');
+INSERT INTO `pendaftaran_snbp` VALUES (10,1,1,1,NULL,NULL,NULL,'2025-11-30 15:12:39');
 /*!40000 ALTER TABLE `pendaftaran_snbp` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -184,20 +184,13 @@ CREATE TABLE `pendaftaran_snbt` (
   `id_biodata` int NOT NULL,
   `id_prodi1` int NOT NULL,
   `id_prodi2` int DEFAULT NULL,
-  `id_pusat_utbk` int NOT NULL,
-  `no_pendaftaranutbk` varchar(20) NOT NULL,
-  `status_pendaftaran` enum('VALID','INVALID') NOT NULL DEFAULT 'INVALID',
-  `tanggal_ujian` datetime NOT NULL,
-  `tanggal_pengumuman` datetime NOT NULL,
-  `hasil_snbt` enum('LULUS','TIDAK_LULUS') NOT NULL DEFAULT 'TIDAK_LULUS',
+  `tanggal_submit` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_snbt`),
   KEY `pendaftaran_snbt_id_biodata_foreign` (`id_biodata`),
-  KEY `pendaftaran_snbt_id_pusat_utbk_foreign` (`id_pusat_utbk`),
   KEY `pendaftaran_snbt_id_prodi1_foreign` (`id_prodi1`),
   CONSTRAINT `pendaftaran_snbt_id_biodata_foreign` FOREIGN KEY (`id_biodata`) REFERENCES `biodata` (`id_biodata`),
-  CONSTRAINT `pendaftaran_snbt_id_prodi1_foreign` FOREIGN KEY (`id_prodi1`) REFERENCES `program_studi` (`id_prodi`),
-  CONSTRAINT `pendaftaran_snbt_id_pusat_utbk_foreign` FOREIGN KEY (`id_pusat_utbk`) REFERENCES `pusat_utbk` (`id_pusat_utbk`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `pendaftaran_snbt_id_prodi1_foreign` FOREIGN KEY (`id_prodi1`) REFERENCES `program_studi` (`id_prodi`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -206,6 +199,7 @@ CREATE TABLE `pendaftaran_snbt` (
 
 LOCK TABLES `pendaftaran_snbt` WRITE;
 /*!40000 ALTER TABLE `pendaftaran_snbt` DISABLE KEYS */;
+INSERT INTO `pendaftaran_snbt` VALUES (3,1,1,2,NULL,'2025-11-30 15:19:45');
 /*!40000 ALTER TABLE `pendaftaran_snbt` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -224,7 +218,7 @@ CREATE TABLE `pengumuman` (
   PRIMARY KEY (`id_pengumuman`),
   KEY `pengumuman_id_user_foreign` (`id_user`),
   CONSTRAINT `pengumuman_id_user_foreign` FOREIGN KEY (`id_user`) REFERENCES `akun_user` (`id_user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -233,6 +227,7 @@ CREATE TABLE `pengumuman` (
 
 LOCK TABLES `pengumuman` WRITE;
 /*!40000 ALTER TABLE `pengumuman` DISABLE KEYS */;
+INSERT INTO `pengumuman` VALUES (1,1,'SNBT','TIDAK_LULUS'),(2,1,'SNBP','LULUS'),(3,1,'SNBT','TIDAK_LULUS'),(4,1,'SNBT','TIDAK_LULUS'),(5,1,'SNBT','LULUS');
 /*!40000 ALTER TABLE `pengumuman` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -297,30 +292,6 @@ INSERT INTO `ptn` VALUES (1,123,'Universitas Dokter Tirta','A','Jawa Timur'),(2,
 UNLOCK TABLES;
 
 --
--- Table structure for table `pusat_utbk`
---
-
-DROP TABLE IF EXISTS `pusat_utbk`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `pusat_utbk` (
-  `id_pusat_utbk` int NOT NULL AUTO_INCREMENT,
-  `nama_pusat_utbk` varchar(100) NOT NULL,
-  `alamat_pusat_utbk` varchar(255) NOT NULL,
-  PRIMARY KEY (`id_pusat_utbk`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `pusat_utbk`
---
-
-LOCK TABLES `pusat_utbk` WRITE;
-/*!40000 ALTER TABLE `pusat_utbk` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pusat_utbk` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `sekolah_asal`
 --
 
@@ -357,4 +328,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-29 23:37:36
+-- Dump completed on 2025-11-30 15:24:08
