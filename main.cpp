@@ -34,8 +34,8 @@ template <typename T> T data(std::string table, std::string value, std::string w
 }
 
 int login(){
-    int option, userId;
-    std::string username, password, email, tanggalLahir, temp;
+    int option, userId, nisn;
+    std::string password, email, tanggalLahir, temp;
     bool exist;
 
     Table tab = db.getTable("akun_user");
@@ -71,15 +71,15 @@ int login(){
     case 2:
         // Kayanya username mending ganti NISN
         // trus tanggal lahir ganti NPSN
+        reg:
         cout << "\n=== REGISTER ===\n";
         cout << "Email: ";
         cin >> email;
-        cout << "Create username: ";
-        cin.ignore();
-        getline(cin, username);
+        cout << "NISN: "; // harus diganti NISN bang to make sure that the user who register is a student
+        cin >> nisn;
         cout << "Create password: ";
         cin >> password;
-        cout << "Tanggal lahir [YYYY-MM-DD]: ";
+        cout << "Tanggal lahir [YYYY-MM-DD]: "; // this also have to replace with NPSN
         cin >> tanggalLahir;
 
         exist = isExist("akun_user", "email", "email", email);
@@ -88,8 +88,14 @@ int login(){
             goto loginRegister;
         }
 
-        tab.insert("email", "nama_user", "password", "tanggal_lahir")
-            .values(email, username, password, tanggalLahir)
+        exist = isExist("biodata", "nisn", "nisn", nisn);
+        if(!exist){
+            cout << "NISN is not found\n";
+            goto reg;
+        }
+
+        tab.insert("email", "password", "tanggal_lahir")
+            .values(email, password, tanggalLahir)
             .execute();
 
         cout << "Register account successfully!\n";
@@ -483,6 +489,7 @@ int main() {
                     
                     sekolahId = data<int>("sekolah_asal", "id_sekolah", "nama_sekolah", sekolah);
                     tab = db.getTable("biodata");
+                    // ganti jadi modify values
                     tab.insert("id_user", "id_sekolah", "nisn", "nama_lengkap", "tempat_lahir", "tanggal_lahir", "jurusan", "tahun_lulus")
                         .values(userId, sekolahId, nisn, nama, tempat, tanggalLahir, jurusan, tahunLulus)
                         .execute();
@@ -497,18 +504,24 @@ int main() {
                     cout << "\nYou have to verify your data first!\n";
                     break;
                 }
-                cout << "\n=== SNBP ===\n";
                 isEligible = data<std::string>("biodata", "status_eligible", "id_user", userId);
     
                 if(isEligible == "Tidak_Eligible"){
                     cout << "Maaf anda bukan siswa eligible.\n";
                 } else {
+                    cout << "\n=== SNBP ===\n";
                     inputJurusan("SNBP", userId, biodataId);
                     announcement(userId, "SNBP");
                 }
 
                 break;
             case 3:
+                exist = isExist("biodata", "id_user", "id_user", userId);
+                if(!exist){
+                    cout << "\nYou have to verify your data first!\n";
+                    break;
+                }
+
                 cout << "\n=== SNBT ===\n";
                 inputJurusan("SNBT", userId, biodataId);
                 soalUtbk(userId);
