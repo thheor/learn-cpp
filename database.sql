@@ -24,14 +24,13 @@ DROP TABLE IF EXISTS `akun_user`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `akun_user` (
   `id_user` int NOT NULL AUTO_INCREMENT,
-  `nama_user` varchar(100) NOT NULL,
   `tanggal_lahir` date NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(12) NOT NULL,
   `status_akun` enum('AKTIF','NONAKTIF') NOT NULL DEFAULT 'AKTIF',
   `tanggal_daftar_akun` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +39,7 @@ CREATE TABLE `akun_user` (
 
 LOCK TABLES `akun_user` WRITE;
 /*!40000 ALTER TABLE `akun_user` DISABLE KEYS */;
-INSERT INTO `akun_user` VALUES (1,'Theo','2007-08-28','user1@gmail.com','123','AKTIF','2025-08-27 17:00:00'),(2,'Prabowo','2025-09-23','bowok@gmail.com','bowo123','AKTIF','2025-11-25 13:07:24'),(3,'Penaldo','2020-09-21','pedo@gmail.com','penaldo123','AKTIF','2025-11-25 13:09:22'),(4,'mengeras','2006-08-28','mengeras@gmail.com','mengeras123','AKTIF','2025-11-25 13:12:50');
+INSERT INTO `akun_user` VALUES (7,'2008-08-28','user1@gmail.com','user123','AKTIF','2025-12-01 12:31:33'),(8,'2009-09-23','user@gmail.com','124','AKTIF','2025-12-01 12:42:49'),(10,'2008-09-03','didy@gmail.com','didy123','AKTIF','2025-12-01 15:09:17'),(11,'2009-09-09','dodit','dodit123','AKTIF','2025-12-01 15:32:56'),(12,'2009-09-09','agus@gmail.com','agus123','AKTIF','2025-12-01 15:40:24'),(13,'2009-09-09','azril@gmail.com','127','AKTIF','2025-12-01 15:46:10'),(14,'2008-09-12','bagas@gmail.com','128','AKTIF','2025-12-01 15:53:55');
 /*!40000 ALTER TABLE `akun_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -53,22 +52,22 @@ DROP TABLE IF EXISTS `biodata`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `biodata` (
   `id_biodata` int NOT NULL AUTO_INCREMENT,
-  `id_user` int NOT NULL,
-  `id_sekolah` int NOT NULL,
+  `id_sekolah` int DEFAULT NULL,
   `nisn` varchar(20) NOT NULL,
-  `nama_lengkap` varchar(100) NOT NULL,
-  `tempat_lahir` varchar(20) NOT NULL,
-  `tanggal_lahir` date NOT NULL,
-  `jurusan` varchar(5) NOT NULL,
-  `tahun_lulus` int NOT NULL,
+  `nama_lengkap` varchar(255) DEFAULT NULL,
+  `tempat_lahir` varchar(20) DEFAULT NULL,
+  `tanggal_lahir` date DEFAULT NULL,
+  `jurusan` varchar(100) DEFAULT NULL,
+  `tahun_lulus` int DEFAULT NULL,
   `status_eligible` enum('Eligible','Tidak_Eligible') NOT NULL DEFAULT 'Tidak_Eligible',
+  `id_user` int DEFAULT NULL,
   PRIMARY KEY (`id_biodata`),
   UNIQUE KEY `biodata_nisn_unique` (`nisn`),
   KEY `biodata_id_sekolah_foreign` (`id_sekolah`),
-  KEY `biodata_id_user_foreign` (`id_user`),
+  KEY `id_user_foreign` (`id_user`),
   CONSTRAINT `biodata_id_sekolah_foreign` FOREIGN KEY (`id_sekolah`) REFERENCES `sekolah_asal` (`id_sekolah`),
-  CONSTRAINT `biodata_id_user_foreign` FOREIGN KEY (`id_user`) REFERENCES `akun_user` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `id_user_foreign` FOREIGN KEY (`id_user`) REFERENCES `akun_user` (`id_user`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -77,7 +76,7 @@ CREATE TABLE `biodata` (
 
 LOCK TABLES `biodata` WRITE;
 /*!40000 ALTER TABLE `biodata` DISABLE KEYS */;
-INSERT INTO `biodata` VALUES (1,1,1,'123','Theo Hernandez','Ngawi','2008-09-24','RPL',2025,'Eligible'),(2,2,1,'124','Prabowo','ogja','1998-08-09','KJ',2021,'Tidak_Eligible');
+INSERT INTO `biodata` VALUES (1,1,'123','Dodit','f','2008-09-23','',2025,'Eligible',7),(2,2,'124','Agus','apua','2009-09-23','IPA',2025,'Tidak_Eligible',8),(3,1,'125','Didy','Jogja','2008-09-23','MIPA',2025,'Eligible',10),(9,2,'126','Agus','Jogja','2009-09-09','MIPA',2025,'Eligible',12),(10,2,'127','Azril','Jogja','2009-09-09','MIPA',2025,'Eligible',13),(11,4,'128','Bagas','Jogja','2008-09-12','MIPA',2025,'Tidak_Eligible',14),(12,NULL,'129',NULL,NULL,NULL,NULL,NULL,'Tidak_Eligible',NULL);
 /*!40000 ALTER TABLE `biodata` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -96,7 +95,7 @@ CREATE TABLE `hasil_utbk` (
   PRIMARY KEY (`id_hasil`),
   KEY `fk_id_user` (`id_user`),
   CONSTRAINT `fk_id_user` FOREIGN KEY (`id_user`) REFERENCES `akun_user` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -105,7 +104,7 @@ CREATE TABLE `hasil_utbk` (
 
 LOCK TABLES `hasil_utbk` WRITE;
 /*!40000 ALTER TABLE `hasil_utbk` DISABLE KEYS */;
-INSERT INTO `hasil_utbk` VALUES (7,'All Subtes',627,1);
+INSERT INTO `hasil_utbk` VALUES (1,'All Subtes',495,8),(2,'All Subtes',693,14),(3,'All Subtes',990,10);
 /*!40000 ALTER TABLE `hasil_utbk` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -118,13 +117,10 @@ DROP TABLE IF EXISTS `nilai_rapor_snbp`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `nilai_rapor_snbp` (
   `id_nilai_rapor` int NOT NULL AUTO_INCREMENT,
-  `id_biodata` int NOT NULL,
   `rata_rata` decimal(8,2) NOT NULL,
   `semester` enum('1','2','3','4','5') DEFAULT NULL,
-  PRIMARY KEY (`id_nilai_rapor`),
-  KEY `nilai_rapor_snbp_id_biodata_foreign` (`id_biodata`),
-  CONSTRAINT `nilai_rapor_snbp_id_biodata_foreign` FOREIGN KEY (`id_biodata`) REFERENCES `biodata` (`id_biodata`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id_nilai_rapor`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,7 +129,6 @@ CREATE TABLE `nilai_rapor_snbp` (
 
 LOCK TABLES `nilai_rapor_snbp` WRITE;
 /*!40000 ALTER TABLE `nilai_rapor_snbp` DISABLE KEYS */;
-INSERT INTO `nilai_rapor_snbp` VALUES (1,1,90.50,'1'),(2,1,91.50,'2'),(3,1,92.50,'3'),(4,1,92.50,'4'),(5,1,93.50,'5');
 /*!40000 ALTER TABLE `nilai_rapor_snbp` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -147,18 +142,18 @@ DROP TABLE IF EXISTS `pendaftaran_snbp`;
 CREATE TABLE `pendaftaran_snbp` (
   `id_snbp` int NOT NULL AUTO_INCREMENT,
   `id_user` int NOT NULL,
-  `id_biodata` int NOT NULL,
   `id_prodi1` int NOT NULL,
   `id_prodi2` int DEFAULT NULL,
   `portofolio` varchar(255) DEFAULT NULL,
   `sertfikat` varchar(255) DEFAULT NULL,
   `tanggal_submit` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `id_biodata` int NOT NULL,
   PRIMARY KEY (`id_snbp`),
   KEY `pendaftaran_snbp_id_prodi1_foreign` (`id_prodi1`),
-  KEY `pendaftaran_snbp_id_biodata_foreign` (`id_biodata`),
-  CONSTRAINT `pendaftaran_snbp_id_biodata_foreign` FOREIGN KEY (`id_biodata`) REFERENCES `biodata` (`id_biodata`),
+  KEY `id_biodata_foreign` (`id_biodata`),
+  CONSTRAINT `id_biodata_foreign` FOREIGN KEY (`id_biodata`) REFERENCES `biodata` (`id_biodata`),
   CONSTRAINT `pendaftaran_snbp_id_prodi1_foreign` FOREIGN KEY (`id_prodi1`) REFERENCES `program_studi` (`id_prodi`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -167,7 +162,7 @@ CREATE TABLE `pendaftaran_snbp` (
 
 LOCK TABLES `pendaftaran_snbp` WRITE;
 /*!40000 ALTER TABLE `pendaftaran_snbp` DISABLE KEYS */;
-INSERT INTO `pendaftaran_snbp` VALUES (10,1,1,1,NULL,NULL,NULL,'2025-11-30 15:12:39');
+INSERT INTO `pendaftaran_snbp` VALUES (1,10,3,NULL,NULL,NULL,'2025-12-01 22:21:45',3),(2,10,2,NULL,NULL,NULL,'2025-12-01 23:02:06',3);
 /*!40000 ALTER TABLE `pendaftaran_snbp` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -188,7 +183,6 @@ CREATE TABLE `pendaftaran_snbt` (
   PRIMARY KEY (`id_snbt`),
   KEY `pendaftaran_snbt_id_biodata_foreign` (`id_biodata`),
   KEY `pendaftaran_snbt_id_prodi1_foreign` (`id_prodi1`),
-  CONSTRAINT `pendaftaran_snbt_id_biodata_foreign` FOREIGN KEY (`id_biodata`) REFERENCES `biodata` (`id_biodata`),
   CONSTRAINT `pendaftaran_snbt_id_prodi1_foreign` FOREIGN KEY (`id_prodi1`) REFERENCES `program_studi` (`id_prodi`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -199,7 +193,7 @@ CREATE TABLE `pendaftaran_snbt` (
 
 LOCK TABLES `pendaftaran_snbt` WRITE;
 /*!40000 ALTER TABLE `pendaftaran_snbt` DISABLE KEYS */;
-INSERT INTO `pendaftaran_snbt` VALUES (3,1,1,2,NULL,'2025-11-30 15:19:45');
+INSERT INTO `pendaftaran_snbt` VALUES (1,8,2,1,2,'2025-12-01 21:45:51'),(2,14,11,1,3,'2025-12-01 22:54:52'),(3,10,3,3,NULL,'2025-12-01 23:02:32');
 /*!40000 ALTER TABLE `pendaftaran_snbt` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -218,7 +212,7 @@ CREATE TABLE `pengumuman` (
   PRIMARY KEY (`id_pengumuman`),
   KEY `pengumuman_id_user_foreign` (`id_user`),
   CONSTRAINT `pengumuman_id_user_foreign` FOREIGN KEY (`id_user`) REFERENCES `akun_user` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -227,7 +221,7 @@ CREATE TABLE `pengumuman` (
 
 LOCK TABLES `pengumuman` WRITE;
 /*!40000 ALTER TABLE `pengumuman` DISABLE KEYS */;
-INSERT INTO `pengumuman` VALUES (1,1,'SNBT','TIDAK_LULUS'),(2,1,'SNBP','LULUS'),(3,1,'SNBT','TIDAK_LULUS'),(4,1,'SNBT','TIDAK_LULUS'),(5,1,'SNBT','LULUS');
+INSERT INTO `pengumuman` VALUES (1,8,'SNBT','TIDAK_LULUS'),(2,14,'SNBT','LULUS'),(3,10,'SNBT','LULUS');
 /*!40000 ALTER TABLE `pengumuman` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -306,7 +300,7 @@ CREATE TABLE `sekolah_asal` (
   `akreditasi_sekolah` enum('A','B','C') NOT NULL DEFAULT 'C',
   PRIMARY KEY (`id_sekolah`),
   UNIQUE KEY `sekolah_asal_npsn_sekolah_unique` (`npsn_sekolah`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -315,7 +309,7 @@ CREATE TABLE `sekolah_asal` (
 
 LOCK TABLES `sekolah_asal` WRITE;
 /*!40000 ALTER TABLE `sekolah_asal` DISABLE KEYS */;
-INSERT INTO `sekolah_asal` VALUES (1,'123','SMAN 1 Ngawi','Ngawi','A');
+INSERT INTO `sekolah_asal` VALUES (1,'123','SMAN 1 Ngawi','Ngawi','A'),(2,'124','SMAN 1 Yogyakarta','DIY','A'),(3,'125','SMAN 2 Yogyakarta','DIY','A'),(4,'126','SMAN 3 Yogyakarta','DIY','A');
 /*!40000 ALTER TABLE `sekolah_asal` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -328,4 +322,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-30 15:24:08
+-- Dump completed on 2025-12-01 23:06:11
