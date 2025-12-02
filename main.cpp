@@ -144,9 +144,9 @@ void inputJurusan(std::string type, int userId, int biodataId){
         constraint = 4;
     }
 
-        inputJurusan:
-        cout << "Masukkan jumlah jurusan (1-" + to_string(constraint) + "): ";
-        cin >> jumlahJurusan;
+    inputJurusan:
+    cout << "Masukkan jumlah jurusan (1-" + to_string(constraint) + "): ";
+    cin >> jumlahJurusan;
 
     if(jumlahJurusan > constraint || jumlahJurusan < 1){
             cout << "Masukkan jumlah jurusan dengan benar!\n";
@@ -389,7 +389,9 @@ void soalUtbk(int userId){
     cout << "Masukkan jawaban: ";
     cin >> jawaban;
     if(jawaban == 'a') scorePU += 100/3;
+
     cout << "\nTerima kasih telah mengerjakan soal UTBK\n";
+    
     double totalScore = scorePU * 10 / 7;
     Table tab = db.getTable("hasil_utbk");
     tab.insert("id_user", "subtes", "skor")
@@ -410,6 +412,7 @@ void announcement(int userId, std::string type){
             cout << "Tetap semangat dan jangan menyerah!\n";
             hasil = "TIDAK_LULUS";
         }
+
         Table tab = db.getTable("pengumuman");
         tab.insert("id_user", "jalur_seleksi", "hasil_akhir")
             .values(userId, type, hasil)
@@ -425,6 +428,7 @@ void announcement(int userId, std::string type){
             cout << "Tetap semangat dan jangan menyerah!\n";
             hasil = "TIDAK_LULUS";
         }
+
         Table tab = db.getTable("pengumuman");
         tab.insert("id_user", "jalur_seleksi", "hasil_akhir")
             .values(userId, type, hasil)
@@ -453,6 +457,7 @@ int main() {
         
         int nisn, tahunLulus, sekolahId;
         std::string nama, temp, tempat, tanggalLahir, sekolah, jurusan;
+        
         switch(option){
             case 1:
                 cout << "\n=== Verifikasi biodata ===\n";
@@ -483,7 +488,6 @@ int main() {
                     cin.ignore();
                     cout << "Nama: ";
                     getline(cin, nama);
-                    // cin.ignore();
                     cout << "Tempat lahir: ";
                     getline(cin, tempat);
                     cout << "Tanggal Lahir [YYYY-MM-DD]: ";
@@ -491,8 +495,6 @@ int main() {
                     cin.ignore();
                     cout << "Sekolah: ";
                     getline(cin, sekolah);
-                    // cout << sekolah << endl;
-                    // cin.ignore();
                     cout << "Jurusan: ";
                     getline(cin, jurusan);
                     cout << "Tahun lulus: ";
@@ -542,7 +544,6 @@ int main() {
                 biodataId = data<int>("biodata", "id_biodata", "id_user", userId);
                 inputJurusan("SNBP", userId, biodataId);
                 announcement(userId, "SNBP");
-            
 
                 break;
             case 3:
